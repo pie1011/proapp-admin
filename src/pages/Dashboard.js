@@ -47,31 +47,31 @@ const Dashboard = () => {
 
   const filteredAndSortedQuotes = () => {
     let filtered = quotes;
-    
+
     if (searchTerm) {
-      filtered = quotes.filter(quote => 
+      filtered = quotes.filter(quote =>
         quote.customer_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quote.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quote.phone_primary?.includes(searchTerm)
       );
     }
-    
+
     filtered.sort((a, b) => {
       let aValue = a[sortField];
       let bValue = b[sortField];
-      
+
       if (sortField === 'created_at') {
         aValue = new Date(aValue);
         bValue = new Date(bValue);
       }
-      
+
       if (sortDirection === 'asc') {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
       }
     });
-    
+
     return filtered;
   };
 
@@ -109,17 +109,20 @@ const Dashboard = () => {
           <Row>
             <Col lg={8}>
               <h1 className="dashboard-title">
-                <i className="fas fa-chart-line me-3"></i>
-                Admin Dashboard
+                <img
+                  src="/images/img-logo.png"
+                  alt="Pro Appliance Installation"
+                  className="dashboard-logo me-3"
+                />
               </h1>
-              <p className="dashboard-subtitle">
-                Quote Management & Customer Overview
-              </p>
+              <h2 className="dashboard-subtitle">
+                Admin Dashboard: Quote Management & Customer Overview
+              </h2>
             </Col>
             <Col lg={4} className="d-flex align-items-center justify-content-lg-end justify-content-start">
               <div className="header-buttons">
-                <Button 
-                  variant="light" 
+                <Button
+                  variant="light"
                   size="sm"
                   className="me-2"
                   onClick={async () => {
@@ -137,9 +140,9 @@ const Dashboard = () => {
                   <i className="fas fa-database me-2"></i>
                   Seed Data
                 </Button>
-                <Button 
-                  variant="outline-light" 
-                  size="sm" 
+                <Button
+                  variant="outline-light"
+                  size="sm"
                   onClick={fetchQuotes}
                 >
                   <i className="fas fa-sync-alt me-2"></i>
@@ -154,47 +157,8 @@ const Dashboard = () => {
       {/* Main Content */}
       <section className="dashboard-content">
         <Container>
-          {/* Search Controls */}
-          <div className="search-container">
-            <Row className="align-items-end">
-              <Col md={6}>
-                <label className="form-label fw-bold text-muted">Search Quotes</label>
-                <div className="position-relative">
-                  <i className="fas fa-search position-absolute search-icon"></i>
-                  <input
-                    type="text"
-                    className="form-control search-input"
-                    placeholder="Search by name, email, or phone..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </Col>
-              <Col md={3}>
-                <label className="form-label fw-bold text-muted">Sort By</label>
-                <select 
-                  className="form-select sort-select"
-                  value={sortField}
-                  onChange={(e) => setSortField(e.target.value)}
-                >
-                  <option value="created_at">Date Created</option>
-                  <option value="customer_name">Customer Name</option>
-                  <option value="email">Email Address</option>
-                </select>
-              </Col>
-              <Col md={3}>
-                <label className="form-label fw-bold text-muted">Order</label>
-                <Button 
-                  variant="outline-primary"
-                  onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
-                  className="w-100 sort-button"
-                >
-                  <i className={`fas fa-sort-${sortDirection === 'asc' ? 'up' : 'down'} me-2`}></i>
-                  {sortDirection === 'asc' ? 'Ascending' : 'Descending'}
-                </Button>
-              </Col>
-            </Row>
-          </div>
+
+
 
           {/* Stats Cards */}
           <div className="stats-container">
@@ -241,6 +205,49 @@ const Dashboard = () => {
             </Row>
           </div>
 
+          {/* Search Controls */}
+          <div className="search-container">
+            <Row className="align-items-end">
+              <Col md={6}>
+                <label className="form-label fw-bold text-muted">Search Quotes</label>
+                <div className="position-relative">
+                  <i className="fas fa-search position-absolute search-icon"></i>
+                  <input
+                    type="text"
+                    className="form-control search-input"
+                    placeholder="Search by name, email, or phone..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </Col>
+              <Col md={3}>
+                <label className="form-label fw-bold text-muted">Sort By</label>
+                <select
+                  className="form-select sort-select"
+                  value={sortField}
+                  onChange={(e) => setSortField(e.target.value)}
+                >
+                  <option value="created_at">Date Created</option>
+                  <option value="customer_name">Customer Name</option>
+                  <option value="email">Email Address</option>
+                </select>
+              </Col>
+              <Col md={3}>
+                <label className="form-label fw-bold text-muted">Order</label>
+                <Button
+                  variant="outline-primary"
+                  onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
+                  className="w-100 sort-button"
+                >
+                  <i className={`fas fa-sort-${sortDirection === 'asc' ? 'up' : 'down'} me-2`}></i>
+                  {sortDirection === 'asc' ? 'Ascending' : 'Descending'}
+                </Button>
+              </Col>
+            </Row>
+          </div>
+
+
           {/* Main Table */}
           <Card className="table-container">
             <Card.Header className="table-header">
@@ -259,8 +266,8 @@ const Dashboard = () => {
                       {quotes.length === 0 ? 'No quotes found in the database' : 'No quotes match your search criteria'}
                     </p>
                     {searchTerm && (
-                      <Button 
-                        variant="link" 
+                      <Button
+                        variant="link"
                         onClick={() => setSearchTerm('')}
                         className="clear-search-btn"
                       >

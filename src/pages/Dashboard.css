@@ -5,9 +5,9 @@
 
 /* Hero Section */
 .dashboard-hero {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, #1e90d4 100%);
+  background: linear-gradient(135deg, var(--dark-gray) 0%, var(--primary-blue-dark) 100%);
   color: white;
-  padding: 2.5rem 0; /* More compact than ServiceAreas' 4rem */
+  padding: 2.5rem 0;
   margin-bottom: 0;
 }
 
