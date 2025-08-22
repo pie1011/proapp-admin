@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Spinner, Alert, Badge } from 'react-bootstrap';
 import { supabase } from '../lib/supabase';
 import './QuoteView.css';
+import CopyButton from '../components/CopyButton';
 
 const QuoteView = () => {
   const { id } = useParams();
@@ -13,10 +14,10 @@ const QuoteView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-useEffect(() => {
-  fetchQuoteDetails();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [id]);
+  useEffect(() => {
+    fetchQuoteDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const fetchQuoteDetails = async () => {
     try {
@@ -132,6 +133,7 @@ useEffect(() => {
       <section className="quote-content py-5">
         <Container>
           <Row>
+
             {/* Customer Information */}
             <Col lg={6} className="mb-4">
               <Card className="info-card">
@@ -142,21 +144,26 @@ useEffect(() => {
                 <Card.Body>
                   <div className="info-item">
                     <strong>Name:</strong> {quote.customer_name}
+                    <CopyButton text={quote.customer_name} label="customer name" />
                   </div>
                   <div className="info-item">
                     <strong>Email:</strong> {quote.email}
+                    <CopyButton text={quote.email} label="email" />
                   </div>
                   <div className="info-item">
                     <strong>Primary Phone:</strong> {quote.phone_primary}
+                    <CopyButton text={quote.phone_primary} label="phone number" />
                   </div>
                   {quote.phone_secondary && (
                     <div className="info-item">
                       <strong>Secondary Phone:</strong> {quote.phone_secondary}
+                      <CopyButton text={quote.phone_secondary} label="secondary phone" />
                     </div>
                   )}
                   <div className="info-item">
                     <strong>Customer Type:</strong>
                     <Badge bg="primary" className="ms-2">{quote.client_type}</Badge>
+                    <CopyButton text={quote.client_type} label="customer type" />
                   </div>
                 </Card.Body>
               </Card>
@@ -172,21 +179,26 @@ useEffect(() => {
                 <Card.Body>
                   <div className="info-item">
                     <strong>Address:</strong> {quote.street}
+                    <CopyButton text={quote.street} label="address" />
                   </div>
                   <div className="info-item">
                     <strong>City:</strong> {quote.city}
+                    <CopyButton text={quote.city} label="city" />
                   </div>
                   <div className="info-item">
                     <strong>ZIP Code:</strong> {quote.zip}
+                    <CopyButton text={quote.zip} label="ZIP code" />
                   </div>
                   {quote.home_type && (
                     <div className="info-item">
                       <strong>Home Type:</strong> {quote.home_type}
+                      <CopyButton text={quote.home_type} label="home type" />
                     </div>
                   )}
                   {quote.floor && (
                     <div className="info-item">
                       <strong>Floor:</strong> {quote.floor}
+                      <CopyButton text={quote.floor} label="floor" />
                     </div>
                   )}
                 </Card.Body>
@@ -213,16 +225,19 @@ useEffect(() => {
                               {appliance.brand && (
                                 <div className="appliance-detail">
                                   <strong>Brand:</strong> {appliance.brand}
+                                  <CopyButton text={appliance.brand} label="brand" />
                                 </div>
                               )}
                               {appliance.model && (
                                 <div className="appliance-detail">
                                   <strong>Model:</strong> {appliance.model}
+                                  <CopyButton text={appliance.model} label="model number" />
                                 </div>
                               )}
                               {appliance.notes && (
                                 <div className="appliance-detail">
                                   <strong>Notes:</strong> {appliance.notes}
+                                  <CopyButton text={appliance.notes} label="notes" />
                                 </div>
                               )}
                             </Card.Body>
@@ -251,39 +266,48 @@ useEffect(() => {
                         <i className="fas fa-shipping-fast me-2"></i>
                         <strong>Delivery:</strong>
                         <Badge bg={quote.delivery === 'Yes' ? 'success' : 'secondary'} className="ms-2">
-                          {quote.delivery || 'Not Selected'}
+                          {quote.delivery}
                         </Badge>
+                        <CopyButton text={quote.delivery} label="delivery preference" />
                       </div>
-                      {quote.pickup_location && (
-                        <div className="service-item">
-                          <i className="fas fa-map-marker-alt me-2"></i>
-                          <strong>Pickup Location:</strong>
-                          <span className="ms-2">{quote.pickup_location}</span>
-                        </div>
-                      )}
-                      {quote.pickup_date && (
-                        <div className="service-item">
-                          <i className="fas fa-calendar me-2"></i>
-                          <strong>Pickup Date:</strong>
-                          <span className="ms-2">{quote.pickup_date}</span>
-                        </div>
-                      )}
-                    </Col>
-                    <Col md={6}>
                       <div className="service-item">
                         <i className="fas fa-tools me-2"></i>
                         <strong>Uninstall Old:</strong>
-                        <Badge bg={quote.uninstall === 'Yes' ? 'success' : 'secondary'} className="ms-2">
-                          {quote.uninstall || 'Not Selected'}
+                        <Badge bg={quote.uninstall_old === 'Yes' ? 'success' : 'secondary'} className="ms-2">
+                          {quote.uninstall_old}
                         </Badge>
+                        <CopyButton text={quote.uninstall_old} label="uninstall preference" />
                       </div>
                       <div className="service-item">
                         <i className="fas fa-trash me-2"></i>
                         <strong>Haul Away:</strong>
                         <Badge bg={quote.haul_away === 'Yes' ? 'success' : 'secondary'} className="ms-2">
-                          {quote.haul_away || 'Not Selected'}
+                          {quote.haul_away}
                         </Badge>
+                        <CopyButton text={quote.haul_away} label="haul away preference" />
                       </div>
+                    </Col>
+                    <Col md={6}>
+                      {quote.field_measure && (
+                        <div className="service-item">
+                          <i className="fas fa-ruler me-2"></i>
+                          <strong>Field Measure:</strong>
+                          <Badge bg={quote.field_measure === 'Yes' ? 'info' : 'secondary'} className="ms-2">
+                            {quote.field_measure}
+                          </Badge>
+                          <CopyButton text={quote.field_measure} label="field measure preference" />
+                        </div>
+                      )}
+                      {quote.purchased && (
+                        <div className="service-item">
+                          <i className="fas fa-shopping-cart me-2"></i>
+                          <strong>Appliances Purchased:</strong>
+                          <Badge bg={quote.purchased === 'Yes' ? 'info' : 'warning'} className="ms-2">
+                            {quote.purchased}
+                          </Badge>
+                          <CopyButton text={quote.purchased} label="purchase status" />
+                        </div>
+                      )}
                     </Col>
                   </Row>
                 </Card.Body>
@@ -327,6 +351,7 @@ useEffect(() => {
                       {quote.parking_notes && (
                         <div className="info-item">
                           <strong>Parking Notes:</strong> {quote.parking_notes}
+                          <CopyButton text={quote.parking_notes} label="parking notes" />
                         </div>
                       )}
                       {quote.gate_code && (
@@ -433,6 +458,7 @@ useEffect(() => {
                   <Card.Header className="card-header-custom">
                     <i className="fas fa-clipboard me-2"></i>
                     Additional Details
+                    <CopyButton text={quote.additional_details} label="additional details" />
                   </Card.Header>
                   <Card.Body>
                     <p className="details-text">{quote.additional_details}</p>
