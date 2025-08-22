@@ -14,7 +14,7 @@ const Login = ({ onLogin }) => {
   // Handle invitation tokens and auth callbacks
   useEffect(() => {
     const handleAuthCallback = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      const { data } = await supabase.auth.getSession();
       if (data?.session) {
         onLogin && onLogin(data.session);
         navigate('/dashboard');
