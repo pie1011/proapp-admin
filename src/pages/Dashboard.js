@@ -103,6 +103,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-page">
+
       {/* Hero Section */}
       <section className="dashboard-hero">
         <Container>
@@ -157,7 +158,6 @@ const Dashboard = () => {
       {/* Main Content */}
       <section className="dashboard-content">
         <Container>
-
 
 
           {/* Stats Cards */}
@@ -300,9 +300,15 @@ const Dashboard = () => {
                               {quote.appliance_details?.length || 0} items
                             </Badge>
                           </td>
-                          <td>
-                            <Button size="sm" className="admin-button">
-                              <i className="fas fa-eye"></i>
+                          <td className="text-center">
+                            <Button
+                              variant="outline-primary"
+                              size="sm"
+                              onClick={() => window.location.href = `/quote/${quote.id}`}
+                              className="view-details-btn"
+                            >
+                              <i className="fas fa-eye me-1"></i>
+                              View Details
                             </Button>
                           </td>
                         </tr>
