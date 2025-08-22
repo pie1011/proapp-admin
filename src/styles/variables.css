@@ -1,0 +1,182 @@
+/* CSS Custom Properties (Variables) */
+:root {
+  /* Primary Brand Colors */
+  --primary-blue: #029be8;
+  --primary-blue-dark: #0070a8;
+  --primary-blue-light: #3fc1d4;
+  
+  /* Secondary Colors */
+  --dark-gray: #2c3e50;
+  --medium-gray: #6c757d;
+  --light-gray: #f8f9fa;
+  --border-gray: #dee2e6;
+  
+  /* Text Colors */
+  --text-dark: #343a40;
+  --text-muted: #6c757d;
+  --text-light: #ecf0f1;
+  
+  /* Background Colors */
+  --bg-white: #ffffff;
+  --bg-light: #f8f9fa;
+  --bg-dark: #343a40;
+  
+  /* State Colors */
+  --success: #28a745;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --info: var(--primary-blue);
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 25px rgba(0,0,0,0.2);
+  
+  /* Transitions */
+  --transition-fast: 0.3s ease;
+  --transition-medium: 0.4s ease;
+  --transition-slow: 0.6s ease;
+}
+
+
+
+
+/* Reusable Quote Button Styling */
+.quote-button {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #1e90d4 100%);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(40, 181, 208, 0.3);
+  transition: all 0.3s ease;
+  color: white;
+  text-decoration: none;
+  text-shadow: var(--primary-blue-dark) 0 1px 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  cursor: pointer;
+}
+
+/* Reusable Quote Button Styling */
+.quote-button {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #1e90d4 100%);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  color: white;
+  text-decoration: none;
+  text-shadow: var(--primary-blue-dark) 0 1px 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  cursor: pointer;
+}
+
+.quote-button-nav {
+  padding: 0.5rem 1.5rem;
+  margin: 1rem;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #1e90d4 100%);
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  color: white;
+  text-decoration: none;
+  text-shadow: var(--primary-blue-dark) 0 1px 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  cursor: pointer;
+}
+
+.quote-button:hover:not(:disabled) {
+  background: var(--dark-gray);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+.quote-button-nav:hover:not(:disabled) {
+  background: var(--dark-gray);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+.quote-button:active {
+  transform: translateY(0);
+}
+
+.quote-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Size Variations */
+.quote-button.btn-sm {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  min-width: 150px;
+}
+
+.quote-button.btn-lg {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.1rem;
+  min-width: 220px;
+}
+
+.quote-button.btn-xl {
+  padding: 1.5rem 3rem;
+  font-size: 1.2rem;
+  min-width: 250px;
+}
+
+/* Icon spacing */
+.quote-button .fas,
+.quote-button .far,
+.quote-button .fab {
+  margin-right: 0.5rem;
+}
+
+.quote-button .fas.me-2,
+.quote-button .far.me-2,
+.quote-button .fab.me-2 {
+  margin-right: 0.5rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .quote-button {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.95rem;
+    min-width: 160px;
+  }
+  
+  .quote-button.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    min-width: 180px;
+  }
+}
+
+/* Dashboard background */
+.dashboard-background {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
