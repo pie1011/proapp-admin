@@ -64,30 +64,33 @@ const QuoteViewNew = () => {
   };
 
 
-  const toggleEnteredStatus = async () => {
-    try {
-      const newStatus = !isEntered;
-
-      // Update in database
-      const { error } = await supabase
-        .from('quotes')
-        .update({ entered_status: newStatus })
-        .eq('id', id);
-
-      if (error) {
-        console.error('Error updating status:', error);
-        alert('Failed to update status');
-        return;
-      }
-
-      // Update local state
-      setIsEntered(newStatus);
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to update status');
+const toggleEnteredStatus = async () => {
+  try {
+    const newStatus = !isEntered;
+    console.log('Attempting to update quote:', id, 'to status:', newStatus);
+    
+    // Update in database
+    const { data, error } = await supabase
+      .from('quotes')
+      .update({ entered_status: newStatus })
+      .eq('id', id);
+    
+    console.log('Supabase response - data:', data, 'error:', error);
+    
+    if (error) {
+      console.error('Error updating status:', error);
+      alert('Failed to update status: ' + error.message);
+      return;
     }
-  };
-
+    
+    // Update local state
+    setIsEntered(newStatus);
+    console.log('Successfully updated status to:', newStatus);
+  } catch (error) {
+    console.error('Catch block error:', error);
+    alert('Failed to update status: ' + error.message);
+  }
+};
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
