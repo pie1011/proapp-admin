@@ -4,6 +4,7 @@ import { Container, Row, Col, Card, Button, Spinner, Alert, Badge } from 'react-
 import { supabase } from '../lib/supabase';
 import './QuoteView.css';
 import CopyButton from '../components/CopyButton';
+import FilePreview from '../components/FilePreview';
 
 const QuoteView = () => {
   const { id } = useParams();
@@ -432,15 +433,7 @@ const QuoteView = () => {
                     <Row>
                       {files.map((file, index) => (
                         <Col md={6} lg={4} key={index} className="mb-3">
-                          <Card className="file-card">
-                            <Card.Body className="text-center">
-                              <i className="fas fa-file-alt file-icon mb-2"></i>
-                              <h6 className="file-name">{file.file_name}</h6>
-                              <small className="file-info text-muted">
-                                {(file.file_size / 1024 / 1024).toFixed(2)} MB
-                              </small>
-                            </Card.Body>
-                          </Card>
+                          <FilePreview file={file} />
                         </Col>
                       ))}
                     </Row>
