@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { supabase } from '../lib/supabase';
-import CopyButton from './CopyButton';
 
 const FilePreview = ({ file }) => {
   const [fileUrl, setFileUrl] = useState(null);
@@ -93,7 +92,6 @@ const FilePreview = ({ file }) => {
         <div className="mt-auto">
           <h6 className="file-name mb-1" style={{ fontSize: '0.9rem' }}>
             {file.file_name}
-            <CopyButton text={file.file_name} label="file name" />
           </h6>
           <small className="file-info text-muted d-block mb-2">
             {(file.file_size / 1024 / 1024).toFixed(2)} MB

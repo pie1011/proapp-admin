@@ -269,7 +269,6 @@ const QuoteView = () => {
                         <Badge bg={quote.delivery === 'Yes' ? 'success' : 'secondary'} className="ms-2">
                           {quote.delivery}
                         </Badge>
-                        <CopyButton text={quote.delivery} label="delivery preference" />
                       </div>
                       <div className="service-item">
                         <i className="fas fa-tools me-2"></i>
@@ -277,7 +276,6 @@ const QuoteView = () => {
                         <Badge bg={quote.uninstall_old === 'Yes' ? 'success' : 'secondary'} className="ms-2">
                           {quote.uninstall_old}
                         </Badge>
-                        <CopyButton text={quote.uninstall_old} label="uninstall preference" />
                       </div>
                       <div className="service-item">
                         <i className="fas fa-trash me-2"></i>
@@ -285,7 +283,6 @@ const QuoteView = () => {
                         <Badge bg={quote.haul_away === 'Yes' ? 'success' : 'secondary'} className="ms-2">
                           {quote.haul_away}
                         </Badge>
-                        <CopyButton text={quote.haul_away} label="haul away preference" />
                       </div>
                     </Col>
                     <Col md={6}>
@@ -296,7 +293,6 @@ const QuoteView = () => {
                           <Badge bg={quote.field_measure === 'Yes' ? 'info' : 'secondary'} className="ms-2">
                             {quote.field_measure}
                           </Badge>
-                          <CopyButton text={quote.field_measure} label="field measure preference" />
                         </div>
                       )}
                       {quote.purchased && (
@@ -420,6 +416,10 @@ const QuoteView = () => {
             </Col>
           </Row>
 
+
+          {/* Debug info - remove later */}
+          {console.log('Files data:', files)}
+
           {/* Files Section */}
           {files.length > 0 && (
             <Row className="mb-4">
@@ -451,10 +451,12 @@ const QuoteView = () => {
                   <Card.Header className="card-header-custom">
                     <i className="fas fa-clipboard me-2"></i>
                     Additional Details
-                    <CopyButton text={quote.additional_details} label="additional details" />
                   </Card.Header>
                   <Card.Body>
-                    <p className="details-text">{quote.additional_details}</p>
+                    <p className="details-text">
+                      {quote.additional_details}
+                      <CopyButton text={quote.additional_details} label="additional details" />
+                    </p>
                   </Card.Body>
                 </Card>
               </Col>
