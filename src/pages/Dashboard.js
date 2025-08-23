@@ -27,7 +27,8 @@ const Dashboard = () => {
           email,
           phone_primary,
           created_at,
-          appliance_details(id)
+          appliance_details(id),
+          entered_status
         `)
         .order('created_at', { ascending: false });
 
@@ -284,7 +285,6 @@ const Dashboard = () => {
                         <th>Date</th>
                         <th>Appliances</th>
                         <th>Status</th>
-
                         <th>Actions</th>
                       </tr>
                     </thead>

@@ -112,16 +112,7 @@ REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 - **File Display**: Shows uploaded customer files when available
 
 ### Search & Filter Functionality
-```javascript
-// Search Implementation
-const filteredAndSortedQuotes = () => {
-let filtered = quotes.filter(quote =>
-quote.customer_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-quote.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-quote.phone_primary?.includes(searchTerm)
-);// Smart sorting by date, name, or email
-// Ascending/descending toggle
-};
+- **Added:** Basic Date, Name, Phone filter and sorting asc/desc
 
 ### Data Seeding System
 - **Realistic Test Data**: 5 detailed fake quotes with appliances
