@@ -132,20 +132,20 @@ quote.phone_primary?.includes(searchTerm)
 
 ### Phase 1: Core Functionality ✅
 - [x] **Quote Detail View** - Individual quote page with full information ✅
-- [ ] **Authentication System** - Secure login for admin access
+- [x] **Authentication System** - Secure login for admin access
 - [ ] **Quote Status Management** - Mark as reviewed, add notes
 
-### Phase 2: Enhanced Features  
+### Phase 2: Production Deployment
+- [x] **Netlify Deployment** - Deploy as separate subdomain
+- [x] **Environment Variables** - Production Supabase config
+- [ ] **Performance Optimization** - Code splitting, lazy loading
+
+### Phase 3: Enhanced Features  
 - [ ] **Export Functionality** - CSV/PDF export of quote data
 - [ ] **Advanced Filtering** - Date ranges, appliance types, status
 - [ ] **Customer Communication** - Email responses from admin panel
 - [ ] **Quote Notes System** - Add internal notes to quotes
 - [ ] **Quote Status Tracking** - Mark quotes as pending, reviewed, completed
-
-### Phase 3: Production Deployment
-- [ ] **Netlify Deployment** - Deploy as separate subdomain
-- [ ] **Environment Variables** - Production Supabase config
-- [ ] **Performance Optimization** - Code splitting, lazy loading
 
 ### Phase 4: Advanced Admin Features
 - [ ] **Analytics Dashboard** - Charts and insights
@@ -157,7 +157,7 @@ quote.phone_primary?.includes(searchTerm)
 
 ### Current Implementation
 - **Database Access**: Uses Supabase anon key (read-only operations)
-- **No Authentication**: Currently open access (development only)
+- **Authentication**: Currently uses authentication through Supabase, no roles yet
 - **Data Isolation**: Separate from main site, no cross-linking
 
 ### Future Security Enhancements
@@ -229,7 +229,7 @@ quote.phone_primary?.includes(searchTerm)
 ## 📞 Related Projects
 
 ### Main Website
-- **Repository**: `pro-appliance-installation` 
+- **Repository**: `proapp` 
 - **Live Site**: https://proappliance.netlify.app/
 - **Database**: Same Supabase instance (shared data)
 

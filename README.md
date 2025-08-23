@@ -39,7 +39,7 @@ This admin portal provides a professional interface for viewing, searching, and 
 
 ## 🔮 Planned Features
 
-- [ ] Authentication system for secure access
+- [x] Authentication system for secure access
 - [ ] Quote status management (pending, reviewed, completed)
 - [ ] Export functionality (CSV/PDF)
 - [ ] Advanced filtering options
