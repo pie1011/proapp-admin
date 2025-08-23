@@ -327,6 +327,33 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
 
+
+/* View Details Button - Custom Styling */
+.view-details-btn {
+  border: 2px solid var(--primary-blue) !important;
+  border-radius: 20px !important;
+  color: var(--primary-blue) !important;
+  background: white !important;
+  font-weight: 500 !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.9rem !important;
+  transition: all var(--transition-fast) !important;
+  min-width: 120px;
+}
+
+.view-details-btn:hover {
+  background: var(--primary-blue) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(2, 155, 232, 0.3);
+}
+
+.view-details-btn:active {
+  transform: translateY(0);
+}
+
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .dashboard-hero {
