@@ -353,6 +353,23 @@
 }
 
 
+/* Status Badge Styling */
+.status-badge {
+  border-radius: 15px !important;
+  padding: 0.4rem 0.8rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  min-width: 75px;
+}
+
+.status-badge.bg-success {
+  background-color: var(--success) !important;
+}
+
+.status-badge.bg-secondary {
+  background-color: var(--medium-gray) !important;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

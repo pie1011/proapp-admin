@@ -283,6 +283,8 @@ const Dashboard = () => {
                         <th>Contact</th>
                         <th>Date</th>
                         <th>Appliances</th>
+                        <th>Status</th>
+
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -300,7 +302,12 @@ const Dashboard = () => {
                               {quote.appliance_details?.length || 0} items
                             </Badge>
                           </td>
-                          <td className="text-center">
+                          <td>
+                            <Badge bg={quote.entered_status ? "success" : "secondary"} className="status-badge">
+                              {quote.entered_status ? "Entered" : "Pending"}
+                            </Badge>
+                          </td>
+                          <td>
                             <Button
                               variant="outline-primary"
                               size="sm"

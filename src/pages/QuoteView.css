@@ -303,6 +303,34 @@
   background-color: #17a2b8 !important;
 }
 
+
+
+
+/* Status Toggle Button */
+.status-toggle-btn {
+  border-radius: 20px !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  padding: 0.4rem 0.8rem !important;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all var(--transition-fast) !important;
+  min-width: 100px;
+}
+
+.status-toggle-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.status-toggle-btn:active {
+  transform: translateY(0);
+}
+
+
+
+
+/* ---------- Responsive Design ---------- */
 /* Responsive Design */
 @media (max-width: 768px) {
   .quote-header {

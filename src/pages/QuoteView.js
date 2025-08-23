@@ -14,6 +14,7 @@ const QuoteViewNew = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEntered, setIsEntered] = useState(false);
 
   useEffect(() => {
     fetchQuoteDetails();
@@ -51,12 +52,39 @@ const QuoteViewNew = () => {
       if (fileError) throw fileError;
 
       setQuote(quoteData);
+      setIsEntered(quoteData.entered_status || false); 
+
       setAppliances(applianceData || []);
       setFiles(fileData || []);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+
+  const toggleEnteredStatus = async () => {
+    try {
+      const newStatus = !isEntered;
+
+      // Update in database
+      const { error } = await supabase
+        .from('quotes')
+        .update({ entered_status: newStatus })
+        .eq('id', id);
+
+      if (error) {
+        console.error('Error updating status:', error);
+        alert('Failed to update status');
+        return;
+      }
+
+      // Update local state
+      setIsEntered(newStatus);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to update status');
     }
   };
 
@@ -120,9 +148,31 @@ const QuoteViewNew = () => {
                 />
                 <div className="text-end">
                   <h1 className="quote-title mb-2">Quote Details</h1>
-                  <p className="quote-subtitle mb-0">
-                    Submitted {formatDate(quote.created_at)} • Quote ID: {quote.id.slice(0, 8)}
-                  </p>
+
+                  <div className="d-flex align-items-center justify-content-between">
+                    <p className="quote-subtitle mb-0">
+                      <strong>Submitted:</strong> <i className="small">{formatDate(quote.created_at)}</i>  • <strong>ID:</strong> <i className="small">{quote.id.slice(0, 8)}</i>
+                    </p>
+                    <Button
+                      variant={isEntered ? "success" : "warning"}
+                      size="sm"
+                      onClick={toggleEnteredStatus}
+                      className="status-toggle-btn ms-3"
+                    >
+                      {isEntered ? (
+                        <>
+                          <i className="fas fa-check me-1"></i>
+                          Entered
+                        </>
+                      ) : (
+                        <>
+                          <i className="fas fa-clock me-1"></i>
+                          Unhandled
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
                 </div>
               </div>
             </Col>
@@ -138,7 +188,7 @@ const QuoteViewNew = () => {
           <Row className="mb-3">
             {/* Column 1: Customer Information */}
             <Col lg={6} className="mb-3 d-flex flex-column">
-              
+
               {/* Customer Information */}
               <Card className="info-card">
                 <Card.Header className="card-header-custom">
@@ -147,24 +197,24 @@ const QuoteViewNew = () => {
                 </Card.Header>
                 <Card.Body>
                   <div className="info-item">
-                    <strong>Name:</strong> 
+                    <strong>Name:</strong>
                     <span>{quote.customer_name}</span>
                     <CopyButton text={quote.customer_name} label="customer name" />
                   </div>
                   <div className="info-item">
-                    <strong>Primary phone:</strong> 
+                    <strong>Primary phone:</strong>
                     <span>{quote.phone_primary}</span>
                     <CopyButton text={quote.phone_primary} label="phone number" />
                   </div>
                   {quote.phone_secondary && (
                     <div className="info-item">
-                      <strong>Secondary phone:</strong> 
+                      <strong>Secondary phone:</strong>
                       <span>{quote.phone_secondary}</span>
                       <CopyButton text={quote.phone_secondary} label="secondary phone" />
                     </div>
                   )}
                   <div className="info-item">
-                    <strong>Email:</strong> 
+                    <strong>Email:</strong>
                     <span>{quote.email}</span>
                     <CopyButton text={quote.email} label="email" />
                   </div>
@@ -175,17 +225,17 @@ const QuoteViewNew = () => {
                     Installation Address
                   </h6>
                   <div className="info-item">
-                    <strong>Address:</strong> 
+                    <strong>Address:</strong>
                     <span>{quote.street}</span>
                     <CopyButton text={quote.street} label="address" />
                   </div>
                   <div className="info-item">
-                    <strong>City:</strong> 
+                    <strong>City:</strong>
                     <span>{quote.city}</span>
                     <CopyButton text={quote.city} label="city" />
                   </div>
                   <div className="info-item">
-                    <strong>Zip:</strong> 
+                    <strong>Zip:</strong>
                     <span>{quote.zip}</span>
                     <CopyButton text={quote.zip} label="ZIP code" />
                   </div>
@@ -196,17 +246,17 @@ const QuoteViewNew = () => {
                     Company Information
                   </h6>
                   <div className="info-item">
-                    <strong>Company name:</strong> 
+                    <strong>Company name:</strong>
                     <span>{quote.company_name || 'Not provided'}</span>
                     {quote.company_name && <CopyButton text={quote.company_name} label="company name" />}
                   </div>
                   <div className="info-item">
-                    <strong>Company address:</strong> 
+                    <strong>Company address:</strong>
                     <span>{quote.company_address || 'Not provided'}</span>
                     {quote.company_address && <CopyButton text={quote.company_address} label="company address" />}
                   </div>
                   <div className="info-item">
-                    <strong>Company phone:</strong> 
+                    <strong>Company phone:</strong>
                     <span>{quote.company_phone || 'Not provided'}</span>
                     {quote.company_phone && <CopyButton text={quote.company_phone} label="company phone" />}
                   </div>
@@ -223,25 +273,25 @@ const QuoteViewNew = () => {
                 </Card.Header>
                 <Card.Body>
                   <div className="info-item">
-                    <strong>Customer type:</strong> 
+                    <strong>Customer type:</strong>
                     <Badge bg="primary" className="badge">{quote.client_type}</Badge>
                   </div>
                   <div className="info-item">
-                    <strong>Uninstall old unit(s)?</strong> 
+                    <strong>Uninstall old unit(s)?</strong>
                     <Badge bg={quote.uninstall_old === 'Yes' ? 'success' : 'secondary'} className="badge">
                       {quote.uninstall_old || 'No'}
                     </Badge>
                     <div className="spacer"></div>
                   </div>
                   <div className="info-item">
-                    <strong>Haul away old unit(s)?</strong> 
+                    <strong>Haul away old unit(s)?</strong>
                     <Badge bg={quote.haul_away === 'Yes' ? 'success' : 'secondary'} className="badge">
                       {quote.haul_away || 'No'}
                     </Badge>
                     <div className="spacer"></div>
                   </div>
                   <div className="info-item">
-                    <strong>Delivery required?</strong> 
+                    <strong>Delivery required?</strong>
                     <Badge bg={quote.delivery === 'Yes' ? 'success' : 'secondary'} className="badge">
                       {quote.delivery || 'No'}
                     </Badge>
@@ -249,27 +299,27 @@ const QuoteViewNew = () => {
                   </div>
                   {quote.pickup_location && (
                     <div className="info-item">
-                      <strong>Pickup location:</strong> 
+                      <strong>Pickup location:</strong>
                       <span>{quote.pickup_location}</span>
                       <CopyButton text={quote.pickup_location} label="pickup location" />
                     </div>
                   )}
                   {quote.home_type && (
                     <div className="info-item">
-                      <strong>Type of home:</strong> 
+                      <strong>Type of home:</strong>
                       <span>{quote.home_type}</span>
                       <CopyButton text={quote.home_type} label="home type" />
                     </div>
                   )}
                   {quote.floor && (
                     <div className="info-item">
-                      <strong>Installation floor/level:</strong> 
+                      <strong>Installation floor/level:</strong>
                       <span>{quote.floor}</span>
                       <CopyButton text={quote.floor} label="floor" />
                     </div>
                   )}
                   <div className="info-item">
-                    <strong>Stairs?</strong> 
+                    <strong>Stairs?</strong>
                     <Badge bg={quote.stairs === 'Yes' ? 'warning' : 'secondary'} className="badge">
                       {quote.stairs || 'No'}
                     </Badge>
@@ -277,29 +327,29 @@ const QuoteViewNew = () => {
                   </div>
                   {quote.parking_notes && (
                     <div className="info-item">
-                      <strong>Parking notes:</strong> 
+                      <strong>Parking notes:</strong>
                       <span>{quote.parking_notes}</span>
                       <CopyButton text={quote.parking_notes} label="parking notes" />
                     </div>
                   )}
 
                   <div className="info-item">
-                    <strong>Field measure?</strong> 
+                    <strong>Field measure?</strong>
                     <Badge bg={quote.field_measure === 'Yes' ? 'success' : 'warning'} className="badge">
                       {quote.field_measure || 'No'}
                     </Badge>
                     <div className="spacer"></div>
                   </div>
                   <div className="info-item">
-                    <strong>Appliances purchased?</strong> 
+                    <strong>Appliances purchased?</strong>
                     <Badge bg={quote.purchased === 'Yes' ? 'success' : 'warning'} className="badge">
                       {quote.purchased || 'No'}
                     </Badge>
                     <div className="spacer"></div>
                   </div>
-                                    {quote.preferred_date && (
+                  {quote.preferred_date && (
                     <div className="info-item">
-                      <strong>Requested date:</strong> 
+                      <strong>Requested date:</strong>
                       <span>{quote.preferred_date}</span>
                       <CopyButton text={quote.preferred_date} label="preferred date" />
                     </div>
@@ -340,35 +390,35 @@ const QuoteViewNew = () => {
                               <h6 className="appliance-type">{appliance.appliance_type}</h6>
                               {appliance.brand && (
                                 <div className="appliance-detail">
-                                  <strong>Brand:</strong> 
+                                  <strong>Brand:</strong>
                                   <span>{appliance.brand}</span>
                                   <CopyButton text={appliance.brand} label="brand" />
                                 </div>
                               )}
                               {appliance.model && (
                                 <div className="appliance-detail">
-                                  <strong>Model:</strong> 
+                                  <strong>Model:</strong>
                                   <span>{appliance.model}</span>
                                   <CopyButton text={appliance.model} label="model number" />
                                 </div>
                               )}
                               {appliance.notes && (
                                 <div className="appliance-detail">
-                                  <strong>Notes:</strong> 
+                                  <strong>Notes:</strong>
                                   <span>{appliance.notes}</span>
                                   <CopyButton text={appliance.notes} label="notes" />
                                 </div>
                               )}
                               {appliance.specifics && (
                                 <div className="appliance-detail">
-                                  <strong>Specifics:</strong> 
+                                  <strong>Specifics:</strong>
                                   <span>{appliance.specifics}</span>
                                   <CopyButton text={appliance.specifics} label="specifics" />
                                 </div>
                               )}
                               {appliance.special_requirements && (
                                 <div className="appliance-detail">
-                                  <strong>Special requirements:</strong> 
+                                  <strong>Special requirements:</strong>
                                   <span>{appliance.special_requirements}</span>
                                   <CopyButton text={appliance.special_requirements} label="special requirements" />
                                 </div>
