@@ -172,7 +172,7 @@ const QuoteViewNew = () => {
                   {/* Installation Address Subtitle */}
                   <h6 className="section-subtitle mt-3 mb-2">
                     <i className="fas fa-map-marker-alt me-2"></i>
-                    Installation address
+                    Installation Address
                   </h6>
                   <div className="info-item">
                     <strong>Address:</strong> 
@@ -193,7 +193,7 @@ const QuoteViewNew = () => {
                   {/* Company Information Subtitle */}
                   <h6 className="section-subtitle mt-3 mb-2">
                     <i className="fas fa-building me-2"></i>
-                    Company information
+                    Company Information
                   </h6>
                   <div className="info-item">
                     <strong>Company name:</strong> 
@@ -282,7 +282,22 @@ const QuoteViewNew = () => {
                       <CopyButton text={quote.parking_notes} label="parking notes" />
                     </div>
                   )}
-                  {quote.preferred_date && (
+
+                  <div className="info-item">
+                    <strong>Field measure?</strong> 
+                    <Badge bg={quote.field_measure === 'Yes' ? 'success' : 'warning'} className="badge">
+                      {quote.field_measure || 'No'}
+                    </Badge>
+                    <div className="spacer"></div>
+                  </div>
+                  <div className="info-item">
+                    <strong>Appliances purchased?</strong> 
+                    <Badge bg={quote.purchased === 'Yes' ? 'success' : 'warning'} className="badge">
+                      {quote.purchased || 'No'}
+                    </Badge>
+                    <div className="spacer"></div>
+                  </div>
+                                    {quote.preferred_date && (
                     <div className="info-item">
                       <strong>Requested date:</strong> 
                       <span>{quote.preferred_date}</span>
@@ -372,51 +387,21 @@ const QuoteViewNew = () => {
           {/* Bottom Row */}
           <Row className="mb-3">
             <Col lg={12}>
-              <Row>
-                {/* Field measure and appliances purchased */}
-                <Col lg={6} className="mb-3">
-                  <Card className="info-card">
-                    <Card.Header className="card-header-custom">
-                      <i className="fas fa-clipboard-check me-2"></i>
-                      Project Status
-                    </Card.Header>
-                    <Card.Body>
-                      <div className="info-item">
-                        <strong>Field measure?</strong> 
-                        <Badge bg={quote.field_measure === 'Yes' ? 'warning' : 'secondary'} className="badge">
-                          {quote.field_measure || 'No'}
-                        </Badge>
-                        <div className="spacer"></div>
-                      </div>
-                      <div className="info-item">
-                        <strong>Appliances purchased?</strong> 
-                        <Badge bg={quote.purchased === 'Yes' ? 'success' : 'warning'} className="badge">
-                          {quote.purchased || 'No'}
-                        </Badge>
-                        <div className="spacer"></div>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </Col>
-
-                {/* Additional details */}
-                {quote.additional_details && (
-                  <Col lg={6} className="mb-3">
-                    <Card className="info-card">
-                      <Card.Header className="card-header-custom">
-                        <i className="fas fa-clipboard me-2"></i>
-                        Additional details
-                      </Card.Header>
-                      <Card.Body>
-                        <p className="details-text">
-                          {quote.additional_details}
-                          <CopyButton text={quote.additional_details} label="additional details" />
-                        </p>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                )}
-              </Row>
+              {/* Additional details */}
+              {quote.additional_details && (
+                <Card className="info-card mb-3">
+                  <Card.Header className="card-header-custom">
+                    <i className="fas fa-clipboard me-2"></i>
+                    Additional details
+                  </Card.Header>
+                  <Card.Body>
+                    <p className="details-text">
+                      {quote.additional_details}
+                      <CopyButton text={quote.additional_details} label="additional details" />
+                    </p>
+                  </Card.Body>
+                </Card>
+              )}
 
               {/* Uploaded files */}
               {files.length > 0 && (

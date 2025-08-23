@@ -95,6 +95,12 @@
   height: 100%;
 }
 
+/* Additional details and uploaded files cards should fit content height */
+.info-card:has(.details-text),
+.info-card:has([class*="file"]) {
+  height: auto;
+}
+
 /* Fix column heights */
 .d-flex.flex-column .info-card:last-child {
   flex-grow: 1;
@@ -217,10 +223,10 @@
 
 /* Section subtitles */
 .section-subtitle {
-  color: var(--primary-blue-dark);
-  font-weight: 600;
+  color: var(--primary-blue);
+  font-weight: 700;
   font-size: 0.9rem;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1.5px solid var(--primary-blue);
   padding-bottom: 0.3rem;
   margin-top: 1rem !important;
   margin-bottom: 0.5rem !important;
