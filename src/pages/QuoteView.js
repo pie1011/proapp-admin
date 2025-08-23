@@ -6,7 +6,7 @@ import './QuoteView.css';
 import CopyButton from '../components/CopyButton';
 import FilePreview from '../components/FilePreview';
 
-const QuoteView = () => {
+const QuoteViewNew = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [quote, setQuote] = useState(null);
@@ -97,7 +97,7 @@ const QuoteView = () => {
   }
 
   return (
-    <div className="quote-view-page">
+    <div className="quote-view-new-page">
 
       {/* Header */}
       <section className="quote-header">
@@ -131,12 +131,15 @@ const QuoteView = () => {
       </section>
 
       {/* Content */}
-      <section className="quote-content py-5">
+      <section className="quote-content py-4">
         <Container>
-          <Row>
 
-            {/* Customer Information */}
-            <Col lg={6} className="mb-4">
+          {/* Top Row */}
+          <Row className="mb-3">
+            {/* Column 1: Customer Information */}
+            <Col lg={6} className="mb-3 d-flex flex-column">
+              
+              {/* Customer Information */}
               <Card className="info-card">
                 <Card.Header className="card-header-custom">
                   <i className="fas fa-user me-2"></i>
@@ -144,62 +147,159 @@ const QuoteView = () => {
                 </Card.Header>
                 <Card.Body>
                   <div className="info-item">
-                    <strong>Name:</strong> {quote.customer_name}
+                    <strong>Name:</strong> 
+                    <span>{quote.customer_name}</span>
                     <CopyButton text={quote.customer_name} label="customer name" />
                   </div>
                   <div className="info-item">
-                    <strong>Email:</strong> {quote.email}
-                    <CopyButton text={quote.email} label="email" />
-                  </div>
-                  <div className="info-item">
-                    <strong>Primary Phone:</strong> {quote.phone_primary}
+                    <strong>Primary phone:</strong> 
+                    <span>{quote.phone_primary}</span>
                     <CopyButton text={quote.phone_primary} label="phone number" />
                   </div>
                   {quote.phone_secondary && (
                     <div className="info-item">
-                      <strong>Secondary Phone:</strong> {quote.phone_secondary}
+                      <strong>Secondary phone:</strong> 
+                      <span>{quote.phone_secondary}</span>
                       <CopyButton text={quote.phone_secondary} label="secondary phone" />
                     </div>
                   )}
                   <div className="info-item">
-                    <strong>Customer Type:</strong>
-                    <Badge bg="primary" className="ms-2">{quote.client_type}</Badge>
-                    <CopyButton text={quote.client_type} label="customer type" />
+                    <strong>Email:</strong> 
+                    <span>{quote.email}</span>
+                    <CopyButton text={quote.email} label="email" />
+                  </div>
+
+                  {/* Installation Address Subtitle */}
+                  <h6 className="section-subtitle mt-3 mb-2">
+                    <i className="fas fa-map-marker-alt me-2"></i>
+                    Installation address
+                  </h6>
+                  <div className="info-item">
+                    <strong>Address:</strong> 
+                    <span>{quote.street}</span>
+                    <CopyButton text={quote.street} label="address" />
+                  </div>
+                  <div className="info-item">
+                    <strong>City:</strong> 
+                    <span>{quote.city}</span>
+                    <CopyButton text={quote.city} label="city" />
+                  </div>
+                  <div className="info-item">
+                    <strong>Zip:</strong> 
+                    <span>{quote.zip}</span>
+                    <CopyButton text={quote.zip} label="ZIP code" />
+                  </div>
+
+                  {/* Company Information Subtitle */}
+                  <h6 className="section-subtitle mt-3 mb-2">
+                    <i className="fas fa-building me-2"></i>
+                    Company information
+                  </h6>
+                  <div className="info-item">
+                    <strong>Company name:</strong> 
+                    <span>{quote.company_name || 'Not provided'}</span>
+                    {quote.company_name && <CopyButton text={quote.company_name} label="company name" />}
+                  </div>
+                  <div className="info-item">
+                    <strong>Company address:</strong> 
+                    <span>{quote.company_address || 'Not provided'}</span>
+                    {quote.company_address && <CopyButton text={quote.company_address} label="company address" />}
+                  </div>
+                  <div className="info-item">
+                    <strong>Company phone:</strong> 
+                    <span>{quote.company_phone || 'Not provided'}</span>
+                    {quote.company_phone && <CopyButton text={quote.company_phone} label="company phone" />}
                   </div>
                 </Card.Body>
               </Card>
             </Col>
 
-            {/* Installation Address */}
-            <Col lg={6} className="mb-4">
-              <Card className="info-card">
+            {/* Column 2: Project Specs */}
+            <Col lg={6} className="mb-3">
+              <Card className="info-card h-100">
                 <Card.Header className="card-header-custom">
-                  <i className="fas fa-map-marker-alt me-2"></i>
-                  Installation Address
+                  <i className="fas fa-clipboard-list me-2"></i>
+                  Project Specs
                 </Card.Header>
                 <Card.Body>
                   <div className="info-item">
-                    <strong>Address:</strong> {quote.street}
-                    <CopyButton text={quote.street} label="address" />
+                    <strong>Customer type:</strong> 
+                    <Badge bg="primary" className="badge">{quote.client_type}</Badge>
                   </div>
                   <div className="info-item">
-                    <strong>City:</strong> {quote.city}
-                    <CopyButton text={quote.city} label="city" />
+                    <strong>Uninstall old unit(s)?</strong> 
+                    <Badge bg={quote.uninstall_old === 'Yes' ? 'success' : 'secondary'} className="badge">
+                      {quote.uninstall_old || 'No'}
+                    </Badge>
+                    <div className="spacer"></div>
                   </div>
                   <div className="info-item">
-                    <strong>ZIP Code:</strong> {quote.zip}
-                    <CopyButton text={quote.zip} label="ZIP code" />
+                    <strong>Haul away old unit(s)?</strong> 
+                    <Badge bg={quote.haul_away === 'Yes' ? 'success' : 'secondary'} className="badge">
+                      {quote.haul_away || 'No'}
+                    </Badge>
+                    <div className="spacer"></div>
                   </div>
+                  <div className="info-item">
+                    <strong>Delivery required?</strong> 
+                    <Badge bg={quote.delivery === 'Yes' ? 'success' : 'secondary'} className="badge">
+                      {quote.delivery || 'No'}
+                    </Badge>
+                    <div className="spacer"></div>
+                  </div>
+                  {quote.pickup_location && (
+                    <div className="info-item">
+                      <strong>Pickup location:</strong> 
+                      <span>{quote.pickup_location}</span>
+                      <CopyButton text={quote.pickup_location} label="pickup location" />
+                    </div>
+                  )}
                   {quote.home_type && (
                     <div className="info-item">
-                      <strong>Home Type:</strong> {quote.home_type}
+                      <strong>Type of home:</strong> 
+                      <span>{quote.home_type}</span>
                       <CopyButton text={quote.home_type} label="home type" />
                     </div>
                   )}
                   {quote.floor && (
                     <div className="info-item">
-                      <strong>Floor:</strong> {quote.floor}
+                      <strong>Installation floor/level:</strong> 
+                      <span>{quote.floor}</span>
                       <CopyButton text={quote.floor} label="floor" />
+                    </div>
+                  )}
+                  <div className="info-item">
+                    <strong>Stairs?</strong> 
+                    <Badge bg={quote.stairs === 'Yes' ? 'warning' : 'secondary'} className="badge">
+                      {quote.stairs || 'No'}
+                    </Badge>
+                    <div className="spacer"></div>
+                  </div>
+                  {quote.parking_notes && (
+                    <div className="info-item">
+                      <strong>Parking notes:</strong> 
+                      <span>{quote.parking_notes}</span>
+                      <CopyButton text={quote.parking_notes} label="parking notes" />
+                    </div>
+                  )}
+                  {quote.preferred_date && (
+                    <div className="info-item">
+                      <strong>Requested date:</strong> 
+                      <span>{quote.preferred_date}</span>
+                      <CopyButton text={quote.preferred_date} label="preferred date" />
+                    </div>
+                  )}
+                  {quote.preferred_time && quote.preferred_time.length > 0 && (
+                    <div className="info-item">
+                      <strong>Requested time:</strong>
+                      <div className="time-badges mt-1">
+                        {quote.preferred_time.map((time, index) => (
+                          <Badge key={index} bg="info" className="me-1 mb-1">
+                            {time}
+                          </Badge>
+                        ))}
+                      </div>
+                      <CopyButton text={quote.preferred_time.join(', ')} label="preferred time" />
                     </div>
                   )}
                 </Card.Body>
@@ -207,9 +307,9 @@ const QuoteView = () => {
             </Col>
           </Row>
 
-          {/* Appliances Section */}
+          {/* Middle Row - Appliances */}
           {appliances.length > 0 && (
-            <Row className="mb-4">
+            <Row className="mb-3">
               <Col lg={12}>
                 <Card className="info-card">
                   <Card.Header className="card-header-custom">
@@ -225,20 +325,37 @@ const QuoteView = () => {
                               <h6 className="appliance-type">{appliance.appliance_type}</h6>
                               {appliance.brand && (
                                 <div className="appliance-detail">
-                                  <strong>Brand:</strong> {appliance.brand}
+                                  <strong>Brand:</strong> 
+                                  <span>{appliance.brand}</span>
                                   <CopyButton text={appliance.brand} label="brand" />
                                 </div>
                               )}
                               {appliance.model && (
                                 <div className="appliance-detail">
-                                  <strong>Model:</strong> {appliance.model}
+                                  <strong>Model:</strong> 
+                                  <span>{appliance.model}</span>
                                   <CopyButton text={appliance.model} label="model number" />
                                 </div>
                               )}
                               {appliance.notes && (
                                 <div className="appliance-detail">
-                                  <strong>Notes:</strong> {appliance.notes}
+                                  <strong>Notes:</strong> 
+                                  <span>{appliance.notes}</span>
                                   <CopyButton text={appliance.notes} label="notes" />
+                                </div>
+                              )}
+                              {appliance.specifics && (
+                                <div className="appliance-detail">
+                                  <strong>Specifics:</strong> 
+                                  <span>{appliance.specifics}</span>
+                                  <CopyButton text={appliance.specifics} label="specifics" />
+                                </div>
+                              )}
+                              {appliance.special_requirements && (
+                                <div className="appliance-detail">
+                                  <strong>Special requirements:</strong> 
+                                  <span>{appliance.special_requirements}</span>
+                                  <CopyButton text={appliance.special_requirements} label="special requirements" />
                                 </div>
                               )}
                             </Card.Body>
@@ -252,181 +369,61 @@ const QuoteView = () => {
             </Row>
           )}
 
-          {/* Services Section */}
-          <Row className="mb-4">
+          {/* Bottom Row */}
+          <Row className="mb-3">
             <Col lg={12}>
-              <Card className="info-card">
-                <Card.Header className="card-header-custom">
-                  <i className="fas fa-truck me-2"></i>
-                  Services & Options
-                </Card.Header>
-                <Card.Body>
-                  <Row>
-                    <Col md={6}>
-                      <div className="service-item">
-                        <i className="fas fa-shipping-fast me-2"></i>
-                        <strong>Delivery:</strong>
-                        <Badge bg={quote.delivery === 'Yes' ? 'success' : 'secondary'} className="ms-2">
-                          {quote.delivery}
+              <Row>
+                {/* Field measure and appliances purchased */}
+                <Col lg={6} className="mb-3">
+                  <Card className="info-card">
+                    <Card.Header className="card-header-custom">
+                      <i className="fas fa-clipboard-check me-2"></i>
+                      Project Status
+                    </Card.Header>
+                    <Card.Body>
+                      <div className="info-item">
+                        <strong>Field measure?</strong> 
+                        <Badge bg={quote.field_measure === 'Yes' ? 'warning' : 'secondary'} className="badge">
+                          {quote.field_measure || 'No'}
                         </Badge>
+                        <div className="spacer"></div>
                       </div>
-                      <div className="service-item">
-                        <i className="fas fa-tools me-2"></i>
-                        <strong>Uninstall Old:</strong>
-                        <Badge bg={quote.uninstall_old === 'Yes' ? 'success' : 'secondary'} className="ms-2">
-                          {quote.uninstall_old}
+                      <div className="info-item">
+                        <strong>Appliances purchased?</strong> 
+                        <Badge bg={quote.purchased === 'Yes' ? 'success' : 'warning'} className="badge">
+                          {quote.purchased || 'No'}
                         </Badge>
+                        <div className="spacer"></div>
                       </div>
-                      <div className="service-item">
-                        <i className="fas fa-trash me-2"></i>
-                        <strong>Haul Away:</strong>
-                        <Badge bg={quote.haul_away === 'Yes' ? 'success' : 'secondary'} className="ms-2">
-                          {quote.haul_away}
-                        </Badge>
-                      </div>
-                    </Col>
-                    <Col md={6}>
-                      {quote.field_measure && (
-                        <div className="service-item">
-                          <i className="fas fa-ruler me-2"></i>
-                          <strong>Field Measure:</strong>
-                          <Badge bg={quote.field_measure === 'Yes' ? 'info' : 'secondary'} className="ms-2">
-                            {quote.field_measure}
-                          </Badge>
-                        </div>
-                      )}
-                      {quote.purchased && (
-                        <div className="service-item">
-                          <i className="fas fa-shopping-cart me-2"></i>
-                          <strong>Appliances Purchased:</strong>
-                          <Badge bg={quote.purchased === 'Yes' ? 'info' : 'warning'} className="ms-2">
-                            {quote.purchased}
-                          </Badge>
-                        </div>
-                      )}
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
 
-          {/* Site Details Section */}
-          <Row className="mb-4">
-            <Col lg={12}>
-              <Card className="info-card">
-                <Card.Header className="card-header-custom">
-                  <i className="fas fa-home me-2"></i>
-                  Site Details
-                </Card.Header>
-                <Card.Body>
-                  <Row>
-                    <Col md={6}>
-                      {quote.stairs && (
-                        <div className="info-item">
-                          <strong>Stairs:</strong> {quote.stairs}
-                        </div>
-                      )}
-                      {quote.stairs_number && (
-                        <div className="info-item">
-                          <strong>Number of Stairs:</strong> {quote.stairs_number}
-                        </div>
-                      )}
-                      {quote.stairs_turns && (
-                        <div className="info-item">
-                          <strong>Turns in Stairs:</strong> {quote.stairs_turns}
-                        </div>
-                      )}
-                    </Col>
-                    <Col md={6}>
-                      {quote.parking && (
-                        <div className="info-item">
-                          <strong>Parking:</strong> {quote.parking}
-                        </div>
-                      )}
-                      {quote.parking_notes && (
-                        <div className="info-item">
-                          <strong>Parking Notes:</strong> {quote.parking_notes}
-                          <CopyButton text={quote.parking_notes} label="parking notes" />
-                        </div>
-                      )}
-                      {quote.gate_code && (
-                        <div className="info-item">
-                          <strong>Gate Code:</strong> {quote.gate_code}
-                        </div>
-                      )}
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+                {/* Additional details */}
+                {quote.additional_details && (
+                  <Col lg={6} className="mb-3">
+                    <Card className="info-card">
+                      <Card.Header className="card-header-custom">
+                        <i className="fas fa-clipboard me-2"></i>
+                        Additional details
+                      </Card.Header>
+                      <Card.Body>
+                        <p className="details-text">
+                          {quote.additional_details}
+                          <CopyButton text={quote.additional_details} label="additional details" />
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                )}
+              </Row>
 
-          {/* Project Timeline Section */}
-          <Row className="mb-4">
-            <Col lg={12}>
-              <Card className="info-card">
-                <Card.Header className="card-header-custom">
-                  <i className="fas fa-calendar-alt me-2"></i>
-                  Project Timeline
-                </Card.Header>
-                <Card.Body>
-                  <Row>
-                    <Col md={6}>
-                      {quote.preferred_date && (
-                        <div className="info-item">
-                          <strong>Preferred Date:</strong> {quote.preferred_date}
-                        </div>
-                      )}
-                      {quote.preferred_time && quote.preferred_time.length > 0 && (
-                        <div className="info-item">
-                          <strong>Preferred Time:</strong>
-                          <div className="time-badges mt-2">
-                            {quote.preferred_time.map((time, index) => (
-                              <Badge key={index} bg="info" className="me-2 mb-1">
-                                {time}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </Col>
-                    <Col md={6}>
-                      {quote.purchased && (
-                        <div className="info-item">
-                          <strong>Appliances Purchased:</strong>
-                          <Badge bg={quote.purchased === 'Yes' ? 'success' : 'warning'} className="ms-2">
-                            {quote.purchased}
-                          </Badge>
-                        </div>
-                      )}
-                      {quote.field_measure && (
-                        <div className="info-item">
-                          <strong>Field Measure Needed:</strong>
-                          <Badge bg={quote.field_measure === 'Yes' ? 'warning' : 'success'} className="ms-2">
-                            {quote.field_measure}
-                          </Badge>
-                        </div>
-                      )}
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-
-
-          {/* Debug info - remove later */}
-          {console.log('Files data:', files)}
-
-          {/* Files Section */}
-          {files.length > 0 && (
-            <Row className="mb-4">
-              <Col lg={12}>
+              {/* Uploaded files */}
+              {files.length > 0 && (
                 <Card className="info-card">
                   <Card.Header className="card-header-custom">
                     <i className="fas fa-paperclip me-2"></i>
-                    Uploaded Files ({files.length})
+                    Uploaded files ({files.length})
                   </Card.Header>
                   <Card.Body>
                     <Row>
@@ -438,33 +435,14 @@ const QuoteView = () => {
                     </Row>
                   </Card.Body>
                 </Card>
-              </Col>
-            </Row>
-          )}
+              )}
+            </Col>
+          </Row>
 
-          {/* Additional Details */}
-          {quote.additional_details && (
-            <Row className="mb-4">
-              <Col lg={12}>
-                <Card className="info-card">
-                  <Card.Header className="card-header-custom">
-                    <i className="fas fa-clipboard me-2"></i>
-                    Additional Details
-                  </Card.Header>
-                  <Card.Body>
-                    <p className="details-text">
-                      {quote.additional_details}
-                      <CopyButton text={quote.additional_details} label="additional details" />
-                    </p>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          )}
         </Container>
       </section>
     </div>
   );
 };
 
-export default QuoteView;
+export default QuoteViewNew;
