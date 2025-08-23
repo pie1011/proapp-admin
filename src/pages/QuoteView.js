@@ -302,7 +302,6 @@ const QuoteView = () => {
                           <Badge bg={quote.purchased === 'Yes' ? 'info' : 'warning'} className="ms-2">
                             {quote.purchased}
                           </Badge>
-                          <CopyButton text={quote.purchased} label="purchase status" />
                         </div>
                       )}
                     </Col>

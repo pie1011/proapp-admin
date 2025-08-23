@@ -23,21 +23,21 @@ const CopyButton = ({ text, label }) => {
         fontSize: '0.75rem',
         border: 'none',
         borderRadius: '4px',
-        background: copied ? '#28a745' : '#f8f9fa',
-        color: copied ? 'white' : '#6c757d',
+        background: copied ? '#28a745' : '#d9ebfeff',
+        color: copied ? 'white' : '#495057',
         transition: 'color 0.2s ease',
         cursor: 'pointer'
       }}
-      onMouseEnter={(e) => {
-        if (!copied) {
-          e.target.style.color = '#495057'; // Slightly darker gray
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!copied) {
-          e.target.style.color = '#6c757d'; // Back to original gray
-        }
-      }}
+      // onMouseEnter={(e) => {
+      //   if (!copied) {
+      //     e.target.style.color = '#495057'; // Slightly darker gray
+      //   }
+      // }}
+      // onMouseLeave={(e) => {
+      //   if (!copied) {
+      //     e.target.style.color = '#6c757d'; // Back to original gray
+      //   }
+      // }}
     >
       {copied ? (
         <i className="fas fa-check" style={{color: 'inherit'}}></i>
