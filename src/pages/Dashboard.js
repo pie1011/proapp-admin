@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Table, Badge, Button, Spinner, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Table, Badge, Button, Spinner, Alert, Modal } from 'react-bootstrap';
 import { supabase } from '../lib/supabase';
 import { seedDatabase } from '../utils/seedData';
 import './Dashboard.css';
 
-const Dashboard = () => {
+const Dashboard = ({ onLogout }) => {
   const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('created_at');
   const [sortDirection, setSortDirection] = useState('desc');
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
 
   useEffect(() => {
     fetchQuotes();
@@ -121,6 +123,8 @@ const Dashboard = () => {
                 Admin Dashboard: Quote Management & Customer Overview
               </h2>
             </Col>
+
+            {/* Header Buttons */}
             <Col lg={4} className="d-flex align-items-center justify-content-lg-end justify-content-start">
               <div className="header-buttons">
                 <Button
@@ -145,13 +149,23 @@ const Dashboard = () => {
                 <Button
                   variant="outline-light"
                   size="sm"
+                  className="me-2"
                   onClick={fetchQuotes}
                 >
                   <i className="fas fa-sync-alt me-2"></i>
                   Refresh
                 </Button>
+                <Button
+                  variant="outline-light"
+                  size="sm"
+                  onClick={() => setShowLogoutModal(true)}
+                >
+                  <i className="fas fa-sign-out-alt me-2"></i>
+                  Logout
+                </Button>
               </div>
             </Col>
+
           </Row>
         </Container>
       </section>
@@ -328,6 +342,36 @@ const Dashboard = () => {
           </Card>
         </Container>
       </section>
+
+      {/* Logout Confirmation Modal */}
+      <Modal show={showLogoutModal} onHide={() => setShowLogoutModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <i className="fas fa-sign-out-alt me-2"></i>
+            Confirm Logout
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="mb-3">Are you sure you want to logout of the admin portal?</p>
+          <small className="text-muted">You'll need to sign in again to access the dashboard.</small>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-secondary" onClick={() => setShowLogoutModal(false)}>
+            <i className="fas fa-times me-2"></i>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => {
+              setShowLogoutModal(false);
+              onLogout();
+            }}
+          >
+            <i className="fas fa-sign-out-alt me-2"></i>
+            Yes, Logout
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
