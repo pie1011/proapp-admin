@@ -162,7 +162,7 @@ const Dashboard = () => {
 
 
           {/* Stats Cards */}
-          <div className="stats-container">
+          {/* <div className="stats-container">
             <Row>
               <Col md={4}>
                 <Card className="stats-card text-center">
@@ -204,7 +204,7 @@ const Dashboard = () => {
                 </Card>
               </Col>
             </Row>
-          </div>
+          </div> */}
 
           {/* Search Controls */}
           <div className="search-container">
@@ -293,7 +293,7 @@ const Dashboard = () => {
                         <tr key={quote.id}>
                           <td>
                             <div className="customer-name">{quote.customer_name}</div>
-                            <div className="customer-email">{quote.email}</div>
+                            {/* <div className="customer-email">{quote.email}</div> */}
                           </td>
                           <td className="contact-info">{quote.phone_primary}</td>
                           <td className="contact-info">{formatDate(quote.created_at)}</td>
@@ -304,7 +304,7 @@ const Dashboard = () => {
                           </td>
                           <td>
                             <Badge bg={quote.entered_status ? "success" : "secondary"} className="status-badge">
-                              {quote.entered_status ? "Entered" : "Pending"}
+                              {quote.entered_status ? "Entered" : "Not Entered"}
                             </Badge>
                           </td>
                           <td>

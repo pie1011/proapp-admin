@@ -170,7 +170,7 @@ const toggleEnteredStatus = async () => {
                       ) : (
                         <>
                           <i className="fas fa-clock me-1"></i>
-                          Unhandled
+                          Not Entered
                         </>
                       )}
                     </Button>
