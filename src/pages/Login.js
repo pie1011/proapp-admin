@@ -17,10 +17,13 @@ const Login = ({ onLogin }) => {
 
   useEffect(() => {
     const handleAuthCallback = async () => {
-      // Check for invite-related URL parameters
-      const accessToken = searchParams.get('access_token');
-      const type = searchParams.get('type');
-      const errorCode = searchParams.get('error_code');
+      // Parse URL hash parameters (Supabase uses hash fragments, not search params)
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      
+      // Also check regular search params as fallback
+      const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
+      const type = hashParams.get('type') || searchParams.get('type');
+      const errorCode = hashParams.get('error_code') || searchParams.get('error_code');
 
       if (errorCode === 'otp_expired') {
         setInviteError('This invitation link has expired. Please request a new invitation from your administrator.');
