@@ -9,6 +9,7 @@ import { supabase } from './lib/supabase';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import QuoteView from './pages/QuoteView';
+import InviteSetup from './pages/InviteSetup';
 
 function App() {
   const [session, setSession] = useState(null);
@@ -58,6 +59,10 @@ function App() {
             <Route 
               path="/" 
               element={session ? <Navigate to="/dashboard" /> : <Login onLogin={handleLogin} />} 
+            />
+            <Route 
+              path="/invite-setup" 
+              element={<InviteSetup onLogin={handleLogin} />} 
             />
             <Route 
               path="/dashboard" 

@@ -1,58 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
 import { supabase } from '../lib/supabase';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // New state for invite flow
-  const [isInviteFlow, setIsInviteFlow] = useState(false);
-  const [inviteError, setInviteError] = useState('');
 
   useEffect(() => {
     const handleAuthCallback = async () => {
-      // Parse URL hash parameters (Supabase uses hash fragments, not search params)
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      
-      // Also check regular search params as fallback
-      const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
-      const type = hashParams.get('type') || searchParams.get('type');
-      const errorCode = hashParams.get('error_code') || searchParams.get('error_code');
-
-      if (errorCode === 'otp_expired') {
-        setInviteError('This invitation link has expired. Please request a new invitation from your administrator.');
-        return;
-      }
-
-      // If this is an invite link, show password setup form instead of auto-login
-      if (accessToken && type === 'invite') {
-        setIsInviteFlow(true);
-        // Get the email from the session if available
-        const { data } = await supabase.auth.getSession();
-        if (data?.session?.user?.email) {
-          setEmail(data.session.user.email);
-        }
-        return;
-      }
-
-      // Only auto-login for non-invite callbacks
-      if (accessToken && type !== 'invite') {
-        const { data } = await supabase.auth.getSession();
-        if (data?.session) {
-          onLogin && onLogin(data.session);
-          navigate('/dashboard');
-        }
+      // Check for existing session (non-invite callbacks)
+      const { data } = await supabase.auth.getSession();
+      if (data?.session) {
+        onLogin && onLogin(data.session);
+        navigate('/dashboard');
       }
     };
 
     handleAuthCallback();
-  }, [searchParams, navigate, onLogin]);
+  }, [navigate, onLogin]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -60,32 +30,15 @@ const Login = ({ onLogin }) => {
     setError('');
 
     try {
-      if (isInviteFlow) {
-        // This is password setup for an invited user
-        const { error } = await supabase.auth.updateUser({
-          password: password
-        });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-        if (error) throw error;
-        
-        // After setting password, they should be automatically logged in
-        const { data } = await supabase.auth.getSession();
-        if (data?.session) {
-          onLogin && onLogin(data.session);
-          navigate('/dashboard');
-        }
-      } else {
-        // Regular login
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        if (error) throw error;
-        
-        onLogin && onLogin(data.session);
-        navigate('/dashboard');
-      }
+      if (error) throw error;
+      
+      onLogin && onLogin(data.session);
+      navigate('/dashboard');
     } catch (error) {
       setError(error.message);
     } finally {
@@ -123,25 +76,15 @@ const Login = ({ onLogin }) => {
               <Card.Body className="p-5">
                 <div className="text-center mb-4">
                   <h3 style={{ color: 'var(--dark-gray)' }}>
-                    {isInviteFlow ? 'Set Your Password' : 'Pro Appliance Admin'}
+                    Pro Appliance Admin
                   </h3>
                   <p className="text-muted">
-                    {isInviteFlow ? 'Complete your account setup' : 'Secure Portal Access'}
+                    Secure Portal Access
                   </p>
                 </div>
                 
-                {/* Show expired invite error */}
-                {inviteError && (
-                  <Alert variant="warning">
-                    <i className="fas fa-exclamation-triangle me-2"></i>
-                    {inviteError}
-                  </Alert>
-                )}
+                {error && <Alert variant="danger">{error}</Alert>}
                 
-                {/* Show regular login error */}
-                {error && !inviteError && <Alert variant="danger">{error}</Alert>}
-                
-                {/* Regular Login Form OR Password Setup Form */}
                 <Form onSubmit={handleLogin}>
                   <Form.Group className="mb-3">
                     <Form.Label>Email</Form.Label>
@@ -151,38 +94,27 @@ const Login = ({ onLogin }) => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      disabled={isInviteFlow}
                     />
                   </Form.Group>
                   
                   <Form.Group className="mb-4">
-                    <Form.Label>
-                      {isInviteFlow ? 'Create Password' : 'Password'}
-                    </Form.Label>
+                    <Form.Label>Password</Form.Label>
                     <Form.Control 
                       type="password" 
-                      placeholder={isInviteFlow ? 'Enter your new password' : 'Enter password'}
+                      placeholder="Enter password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
                     />
-                    {isInviteFlow && (
-                      <Form.Text className="text-muted">
-                        Choose a secure password with at least 8 characters
-                      </Form.Text>
-                    )}
                   </Form.Group>
                   
                   <Button 
                     type="submit"
                     className="admin-button w-100"
-                    disabled={loading || !!inviteError}
+                    disabled={loading}
                   >
-                    <i className={`fas ${isInviteFlow ? 'fa-key' : 'fa-sign-in-alt'} me-2`}></i>
-                    {loading ? 
-                      (isInviteFlow ? 'Setting up account...' : 'Signing in...') : 
-                      (isInviteFlow ? 'Complete Setup' : 'Login to Admin Panel')
-                    }
+                    <i className="fas fa-sign-in-alt me-2"></i>
+                    {loading ? 'Signing in...' : 'Login to Admin Panel'}
                   </Button>
                 </Form>
               </Card.Body>
