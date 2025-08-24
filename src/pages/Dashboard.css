@@ -226,7 +226,7 @@
 
 /* Keep the cute badge colors! */
 .appliance-badge {
-  background-color: #17a2b8 !important; /* Keep the bg-info blue */
+  background-color: var(--primary-blue-dark) !important;
   color: white;
   border-radius: 20px;
   padding: 0.4rem 0.8rem;
