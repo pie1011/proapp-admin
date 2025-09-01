@@ -50,23 +50,6 @@ const QuoteViewNew = () => {
         .eq('quote_id', id)
         .order('upload_order');
 
-      // Function to archive the quote
-      const archiveQuote = async () => {
-        try {
-          const { error } = await supabase
-            .from('quotes')
-            .update({ archived: true })
-            .eq('id', id);
-          if (error) throw error;
-
-          setShowArchiveModal(false);
-          navigate('/dashboard');
-        } catch (err) {
-          console.error('Error archiving quote:', err);
-          alert('Failed to archive quote: ' + err.message);
-        }
-      };
-
       if (fileError) throw fileError;
 
       setQuote(quoteData);
@@ -109,6 +92,25 @@ const QuoteViewNew = () => {
       alert('Failed to update status: ' + error.message);
     }
   };
+
+
+      // Function to archive the quote
+      const archiveQuote = async () => {
+        try {
+          const { error } = await supabase
+            .from('quotes')
+            .update({ archived: true })
+            .eq('id', id);
+          if (error) throw error;
+
+          setShowArchiveModal(false);
+          navigate('/dashboard');
+        } catch (err) {
+          console.error('Error archiving quote:', err);
+          alert('Failed to archive quote: ' + err.message);
+        }
+      };
+      
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
