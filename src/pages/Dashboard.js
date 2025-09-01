@@ -184,19 +184,7 @@ const Dashboard = ({ onLogout }) => {
                   Refresh
                 </Button>
 
-                {/* Bulk Archive Button */}
-                <Button
-                  variant="outline-warning"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => setShowBulkArchiveModal(true)}
-                  disabled={quotes.filter(q => q.entered_status && !q.archived).length === 0}
-                >
-                  <i className="fas fa-archive me-2"></i>
-                  Archive All Entered
-                </Button>
-
-
+                {/* Logout Button */}
                 <Button
                   variant="outline-light"
                   size="sm"
@@ -313,17 +301,17 @@ const Dashboard = ({ onLogout }) => {
                 Quote Requests ({filteredAndSortedQuotes().length}{searchTerm ? ` of ${quotes.length}` : ''})
               </h3>
 
-                {/* Bulk Archive Button */}
-                <Button
-                  variant="outline-warning"
-                  size="sm"
-                  className="header-buttons btn-outline-light me-2"
-                  onClick={() => setShowBulkArchiveModal(true)}
-                  disabled={quotes.filter(q => q.entered_status && !q.archived).length === 0}
-                >
-                  <i className="fas fa-archive me-2"></i>
-                  Archive All Entered
-                </Button>
+              {/* Bulk Archive Button */}
+              <Button
+                variant="outline-warning"
+                size="sm"
+                className="header-buttons btn-outline-light me-2"
+                onClick={() => setShowBulkArchiveModal(true)}
+                disabled={quotes.filter(q => q.entered_status && !q.archived).length === 0}
+              >
+                <i className="fas fa-archive me-2"></i>
+                Archive All Entered
+              </Button>
 
             </Card.Header>
             <Card.Body className="p-0">
