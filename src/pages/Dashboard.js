@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Card, Table, Badge, Button, Spinner, Alert, Modal } from 'react-bootstrap';
 import { supabase } from '../lib/supabase';
 import { seedDatabase } from '../utils/seedData';
@@ -13,38 +13,45 @@ const Dashboard = ({ onLogout }) => {
   const [sortDirection, setSortDirection] = useState('desc');
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showBulkArchiveModal, setShowBulkArchiveModal] = useState(false);
+  const [showArchived, setShowArchived] = useState(false);
 
 
-  useEffect(() => {
-    fetchQuotes();
-  }, []);
+const fetchQuotes = useCallback(async () => {
+  try {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('quotes')
+      .select(`
+        id,
+        customer_name,
+        email,
+        phone_primary,
+        created_at,
+        appliance_details(id),
+        entered_status
+      `)
+      .eq('archived', showArchived)  // Dynamic filter based on toggle
+      .order('created_at', { ascending: false });
 
-  const fetchQuotes = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('quotes')
-        .select(`
-          id,
-          customer_name,
-          email,
-          phone_primary,
-          created_at,
-          appliance_details(id),
-          entered_status
-        `)
-        .eq('archived', false)
-        .order('created_at', { ascending: false });
+    if (error) throw error;
+    setQuotes(data || []);
+  } catch (error) {
+    setError(error.message);
+    console.error('Error fetching quotes:', error);
+  } finally {
+    setLoading(false);
+  }
+}, [showArchived]); // showArchived is the dependency
 
-      if (error) throw error;
-      setQuotes(data || []);
-    } catch (error) {
-      setError(error.message);
-      console.error('Error fetching quotes:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+useEffect(() => {
+  fetchQuotes();
+}, [fetchQuotes]);
+
+// Refresh quotes when archive view toggle changes  
+useEffect(() => {
+  fetchQuotes();
+}, [fetchQuotes, showArchived]);
+
 
   const bulkArchiveEntered = async () => {
     try {
@@ -300,6 +307,19 @@ const Dashboard = ({ onLogout }) => {
                 <i className="fas fa-list me-2"></i>
                 Quote Requests ({filteredAndSortedQuotes().length}{searchTerm ? ` of ${quotes.length}` : ''})
               </h3>
+              <div>
+
+              {/* Archive Toggle Button */}
+              <Button
+                variant={showArchived ? "outline-light" : "outline-light"}
+                size="sm"
+                className="me-2"
+                onClick={() => setShowArchived(!showArchived)}
+                title={showArchived ? "Switch to Active Quotes" : "Switch to Archived Quotes"}
+              >
+                <i className={`fas ${showArchived ? 'fa-eye-slash' : 'fa-archive'} me-2`}></i>
+                {showArchived ? 'View Active' : 'View Archived'}
+              </Button>
 
               {/* Bulk Archive Button */}
               <Button
@@ -312,6 +332,7 @@ const Dashboard = ({ onLogout }) => {
                 <i className="fas fa-archive me-2"></i>
                 Archive All Entered
               </Button>
+              </div>
 
             </Card.Header>
             <Card.Body className="p-0">
