@@ -12,6 +12,7 @@ const Dashboard = ({ onLogout }) => {
   const [sortField, setSortField] = useState('created_at');
   const [sortDirection, setSortDirection] = useState('desc');
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showBulkArchiveModal, setShowBulkArchiveModal] = useState(false);
 
 
   useEffect(() => {
@@ -45,6 +46,32 @@ const Dashboard = ({ onLogout }) => {
     }
   };
 
+  const bulkArchiveEntered = async () => {
+    try {
+      const enteredQuotes = quotes.filter(q => q.entered_status && !q.archived);
+
+      if (enteredQuotes.length === 0) {
+        alert('No entered quotes to archive.');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('quotes')
+        .update({ archived: true })
+        .eq('entered_status', true)
+        .eq('archived', false);
+
+      if (error) throw error;
+
+      // Refresh the quotes list
+      await fetchQuotes();
+      setShowBulkArchiveModal(false);
+      alert(`Successfully archived ${enteredQuotes.length} quotes!`);
+    } catch (error) {
+      console.error('Error bulk archiving quotes:', error);
+      alert('Error archiving quotes: ' + error.message);
+    }
+  };
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
   };
@@ -156,6 +183,20 @@ const Dashboard = ({ onLogout }) => {
                   <i className="fas fa-sync-alt me-2"></i>
                   Refresh
                 </Button>
+
+                {/* Bulk Archive Button */}
+                <Button
+                  variant="outline-warning"
+                  size="sm"
+                  className="me-2"
+                  onClick={() => setShowBulkArchiveModal(true)}
+                  disabled={quotes.filter(q => q.entered_status && !q.archived).length === 0}
+                >
+                  <i className="fas fa-archive me-2"></i>
+                  Archive All Entered
+                </Button>
+
+
                 <Button
                   variant="outline-light"
                   size="sm"
@@ -266,11 +307,24 @@ const Dashboard = ({ onLogout }) => {
 
           {/* Main Table */}
           <Card className="table-container">
-            <Card.Header className="table-header">
+            <Card.Header className="table-header flex-column flex-md-row d-md-flex align-items-md-center justify-content-md-between">
               <h3 className="table-title">
                 <i className="fas fa-list me-2"></i>
                 Quote Requests ({filteredAndSortedQuotes().length}{searchTerm ? ` of ${quotes.length}` : ''})
               </h3>
+
+                {/* Bulk Archive Button */}
+                <Button
+                  variant="outline-warning"
+                  size="sm"
+                  className="header-buttons btn-outline-light me-2"
+                  onClick={() => setShowBulkArchiveModal(true)}
+                  disabled={quotes.filter(q => q.entered_status && !q.archived).length === 0}
+                >
+                  <i className="fas fa-archive me-2"></i>
+                  Archive All Entered
+                </Button>
+
             </Card.Header>
             <Card.Body className="p-0">
               {(() => {
@@ -370,6 +424,42 @@ const Dashboard = ({ onLogout }) => {
           >
             <i className="fas fa-sign-out-alt me-2"></i>
             Yes, Logout
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Bulk Archive Confirmation Modal */}
+      <Modal show={showBulkArchiveModal} onHide={() => setShowBulkArchiveModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <i className="fas fa-archive me-2"></i>
+            Archive All Entered Quotes
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="mb-3">
+            Are you sure you want to archive all quotes marked as "Entered"?
+          </p>
+          <div className="alert alert-info">
+            <i className="fas fa-info-circle me-2"></i>
+            <strong>{quotes.filter(q => q.entered_status && !q.archived).length}</strong> quotes will be archived and hidden from the dashboard.
+          </div>
+          <small className="text-muted">
+            This action will clean up your dashboard by hiding completed quotes.
+          </small>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-secondary" onClick={() => setShowBulkArchiveModal(false)}>
+            <i className="fas fa-times me-2"></i>
+            Cancel
+          </Button>
+          <Button
+            variant="warning"
+            onClick={bulkArchiveEntered}
+            disabled={quotes.filter(q => q.entered_status && !q.archived).length === 0}
+          >
+            <i className="fas fa-archive me-2"></i>
+            Archive {quotes.filter(q => q.entered_status && !q.archived).length} Quotes
           </Button>
         </Modal.Footer>
       </Modal>
