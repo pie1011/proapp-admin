@@ -32,6 +32,7 @@ const Dashboard = ({ onLogout }) => {
           appliance_details(id),
           entered_status
         `)
+        .eq('archived', false)
         .order('created_at', { ascending: false });
 
       if (error) throw error;

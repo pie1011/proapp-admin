@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Button, Spinner, Alert, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Spinner, Alert, Badge, Modal } from 'react-bootstrap';
 import { supabase } from '../lib/supabase';
 import './QuoteView.css';
 import CopyButton from '../components/CopyButton';
@@ -15,6 +15,7 @@ const QuoteViewNew = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEntered, setIsEntered] = useState(false);
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
 
   useEffect(() => {
     fetchQuoteDetails();
@@ -49,10 +50,27 @@ const QuoteViewNew = () => {
         .eq('quote_id', id)
         .order('upload_order');
 
+      // Function to archive the quote
+      const archiveQuote = async () => {
+        try {
+          const { error } = await supabase
+            .from('quotes')
+            .update({ archived: true })
+            .eq('id', id);
+          if (error) throw error;
+
+          setShowArchiveModal(false);
+          navigate('/dashboard');
+        } catch (err) {
+          console.error('Error archiving quote:', err);
+          alert('Failed to archive quote: ' + err.message);
+        }
+      };
+
       if (fileError) throw fileError;
 
       setQuote(quoteData);
-      setIsEntered(quoteData.entered_status || false); 
+      setIsEntered(quoteData.entered_status || false);
 
       setAppliances(applianceData || []);
       setFiles(fileData || []);
@@ -64,33 +82,33 @@ const QuoteViewNew = () => {
   };
 
 
-const toggleEnteredStatus = async () => {
-  try {
-    const newStatus = !isEntered;
-    console.log('Attempting to update quote:', id, 'to status:', newStatus);
-    
-    // Update in database
-    const { data, error } = await supabase
-      .from('quotes')
-      .update({ entered_status: newStatus })
-      .eq('id', id);
-    
-    console.log('Supabase response - data:', data, 'error:', error);
-    
-    if (error) {
-      console.error('Error updating status:', error);
+  const toggleEnteredStatus = async () => {
+    try {
+      const newStatus = !isEntered;
+      console.log('Attempting to update quote:', id, 'to status:', newStatus);
+
+      // Update in database
+      const { data, error } = await supabase
+        .from('quotes')
+        .update({ entered_status: newStatus })
+        .eq('id', id);
+
+      console.log('Supabase response - data:', data, 'error:', error);
+
+      if (error) {
+        console.error('Error updating status:', error);
+        alert('Failed to update status: ' + error.message);
+        return;
+      }
+
+      // Update local state
+      setIsEntered(newStatus);
+      console.log('Successfully updated status to:', newStatus);
+    } catch (error) {
+      console.error('Catch block error:', error);
       alert('Failed to update status: ' + error.message);
-      return;
     }
-    
-    // Update local state
-    setIsEntered(newStatus);
-    console.log('Successfully updated status to:', newStatus);
-  } catch (error) {
-    console.error('Catch block error:', error);
-    alert('Failed to update status: ' + error.message);
-  }
-};
+  };
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -174,6 +192,17 @@ const toggleEnteredStatus = async () => {
                         </>
                       )}
                     </Button>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => setShowArchiveModal(true)}
+                      className="ms-2"
+                      title="Archive this quote"
+                    >
+                      <i className="fas fa-archive me-2"></i>
+                      Archive
+                    </Button>
+
                   </div>
 
                 </div>
@@ -479,6 +508,35 @@ const toggleEnteredStatus = async () => {
 
         </Container>
       </section>
+
+      {/* Archive Confirmation Modal */}
+      {/* Archive Confirmation Modal */}
+      <Modal show={showArchiveModal} onHide={() => setShowArchiveModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <i className="fas fa-archive me-2"></i>
+            Archive Quote
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="mb-3">
+            Are you sure you want to archive this quote from <strong>{quote?.customer_name}</strong>?
+          </p>
+          <small className="text-muted">
+            Archived quotes will be hidden from the main dashboard and search results.
+          </small>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-secondary" onClick={() => setShowArchiveModal(false)}>
+            <i className="fas fa-times me-2"></i>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={archiveQuote}>
+            <i className="fas fa-archive me-2"></i>
+            Yes, Archive Quote
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
