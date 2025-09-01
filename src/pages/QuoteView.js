@@ -94,23 +94,23 @@ const QuoteViewNew = () => {
   };
 
 
-      // Function to archive the quote
-      const archiveQuote = async () => {
-        try {
-          const { error } = await supabase
-            .from('quotes')
-            .update({ archived: true })
-            .eq('id', id);
-          if (error) throw error;
+  // Function to archive the quote
+  const archiveQuote = async () => {
+    try {
+      const { error } = await supabase
+        .from('quotes')
+        .update({ archived: true })
+        .eq('id', id);
+      if (error) throw error;
 
-          setShowArchiveModal(false);
-          navigate('/dashboard');
-        } catch (err) {
-          console.error('Error archiving quote:', err);
-          alert('Failed to archive quote: ' + err.message);
-        }
-      };
-      
+      setShowArchiveModal(false);
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Error archiving quote:', err);
+      alert('Failed to archive quote: ' + err.message);
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -194,11 +194,13 @@ const QuoteViewNew = () => {
                         </>
                       )}
                     </Button>
+
+                    {/* Archive Button */}
                     <Button
-                      variant="outline-danger"
+                      variant="warning"
                       size="sm"
                       onClick={() => setShowArchiveModal(true)}
-                      className="ms-2"
+                      className="status-toggle-btn ms-3"
                       title="Archive this quote"
                     >
                       <i className="fas fa-archive me-2"></i>
