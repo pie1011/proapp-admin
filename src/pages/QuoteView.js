@@ -54,6 +54,8 @@ const QuoteViewNew = () => {
 
       setQuote(quoteData);
       setIsEntered(quoteData.entered_status || false);
+      setIsArchived(quoteData.archived || false);  // Add this line
+
 
       setAppliances(applianceData || []);
       setFiles(fileData || []);
