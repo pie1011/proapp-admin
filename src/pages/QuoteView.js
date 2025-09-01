@@ -16,6 +16,7 @@ const QuoteViewNew = () => {
   const [error, setError] = useState(null);
   const [isEntered, setIsEntered] = useState(false);
   const [showArchiveModal, setShowArchiveModal] = useState(false);
+  const [isArchived, setIsArchived] = useState(false);
 
   useEffect(() => {
     fetchQuoteDetails();
@@ -97,21 +98,25 @@ const QuoteViewNew = () => {
 
 
   // Function to archive the quote
-  const archiveQuote = async () => {
-    try {
-      const { error } = await supabase
-        .from('quotes')
-        .update({ archived: true })
-        .eq('id', id);
-      if (error) throw error;
+const toggleArchivedStatus = async () => {
+  try {
+    const newStatus = !isArchived;
+    
+    const { error } = await supabase
+      .from('quotes')
+      .update({ archived: newStatus })
+      .eq('id', id);
 
-      setShowArchiveModal(false);
-      navigate('/dashboard');
-    } catch (err) {
-      console.error('Error archiving quote:', err);
-      alert('Failed to archive quote: ' + err.message);
-    }
-  };
+    if (error) throw error;
+    
+    // Update local state and close modal
+    setIsArchived(newStatus);
+    setShowArchiveModal(false);
+  } catch (error) {
+    console.error('Error updating archived status:', error);
+    alert('Error updating archived status: ' + error.message);
+  }
+};
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -199,14 +204,17 @@ const QuoteViewNew = () => {
 
                     {/* Archive Button */}
                     <Button
-                      variant="warning"
+                      variant={isArchived ? "success" : "warning"}
                       size="sm"
                       onClick={() => setShowArchiveModal(true)}
                       className="status-toggle-btn ms-3"
-                      title="Archive this quote"
+                      title={isArchived ? "Unarchive this quote" : "Archive this quote"}
                     >
-                      <i className="fas fa-archive me-2"></i>
-                      Archive
+                      {isArchived ?
+                        <><i className="fas fa-undo me-2"></i>Unarchive</> :
+                        <><i className="fas fa-archive me-2"></i>Archive</>
+                      }
+
                     </Button>
 
                   </div>
@@ -515,34 +523,35 @@ const QuoteViewNew = () => {
         </Container>
       </section>
 
-      {/* Archive Confirmation Modal */}
-      {/* Archive Confirmation Modal */}
-      <Modal show={showArchiveModal} onHide={() => setShowArchiveModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <i className="fas fa-archive me-2"></i>
-            Archive Quote
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p className="mb-3">
-            Are you sure you want to archive this quote from <strong>{quote?.customer_name}</strong>?
-          </p>
-          <small className="text-muted">
-            Archived quotes will be hidden from the main dashboard and search results.
-          </small>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-secondary" onClick={() => setShowArchiveModal(false)}>
-            <i className="fas fa-times me-2"></i>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={archiveQuote}>
-            <i className="fas fa-archive me-2"></i>
-            Yes, Archive Quote
-          </Button>
-        </Modal.Footer>
-      </Modal>
+{/* Archive/Unarchive Confirmation Modal */}
+<Modal show={showArchiveModal} onHide={() => setShowArchiveModal(false)} centered>
+  <Modal.Header closeButton>
+    <Modal.Title>
+      <i className={`fas ${isArchived ? 'fa-undo' : 'fa-archive'} me-2`}></i>
+      {isArchived ? 'Unarchive Quote' : 'Archive Quote'}
+    </Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <p className="mb-3">
+      Are you sure you want to {isArchived ? 'unarchive' : 'archive'} this quote from <strong>{quote?.customer_name}</strong>?
+    </p>
+    <small className="text-muted">
+      {isArchived 
+        ? 'This quote will be moved back to the active quotes dashboard.' 
+        : 'Archived quotes will be hidden from the main dashboard and search results.'}
+    </small>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="outline-secondary" onClick={() => setShowArchiveModal(false)}>
+      <i className="fas fa-times me-2"></i>
+      Cancel
+    </Button>
+    <Button variant={isArchived ? "secondary" : "danger"} onClick={toggleArchivedStatus}>
+      <i className={`fas ${isArchived ? 'fa-undo' : 'fa-archive'} me-2`}></i>
+      {isArchived ? 'Yes, Unarchive' : 'Yes, Archive Quote'}
+    </Button>
+  </Modal.Footer>
+</Modal>
     </div>
   );
 };

@@ -14,7 +14,6 @@ const Dashboard = ({ onLogout }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showBulkArchiveModal, setShowBulkArchiveModal] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
-const [isArchived, setIsArchived] = useState(false);
 
 const fetchQuotes = useCallback(async () => {
   try {
